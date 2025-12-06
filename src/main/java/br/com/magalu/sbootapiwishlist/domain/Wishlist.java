@@ -1,11 +1,17 @@
 package br.com.magalu.sbootapiwishlist.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Wishlist {
 
-    private String clientId;
-    private List<WishlistItem> products;
+    private final String clientId;
+    private final List<WishlistItem> products;
+
+    public Wishlist(String clientId) {
+        this.clientId = clientId;
+        this.products = new ArrayList<>();
+    }
 
     public void addProduct(WishlistItem item) {
         if (item != null && products.size() >= 20) {

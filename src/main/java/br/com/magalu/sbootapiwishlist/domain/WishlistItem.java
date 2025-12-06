@@ -1,20 +1,24 @@
 package br.com.magalu.sbootapiwishlist.domain;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class WishlistItem {
 
-    private String productId;
-    private String productName;
-    private String productDescription;
-    private String productImageUrl;
-    private String productPrice;
-    private String productCategory;
-    private Instant addedAt;
+    private final String productId;
+    private final String productName;
+    private final String productDescription;
+    private final String productImageUrl;
+    private final String productPrice;
+    private final String productCategory;
+    private final Instant addedAt;
 
     public WishlistItem(String productId, String productName, String productDescription,
                         String productImageUrl, String productPrice, String productCategory) {
-        this.productId = productId;
+        this.productId = Objects.requireNonNull(productId, "productId can not be null");
+        if (this.productId.isBlank()) {
+            throw new IllegalArgumentException("productId can not be blank");
+        }
         this.productName = productName;
         this.productDescription = productDescription;
         this.productImageUrl = productImageUrl;
@@ -25,29 +29,5 @@ public class WishlistItem {
 
     public String getProductId() {
         return productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getProductDescription() {
-        return productDescription;
-    }
-
-    public String getProductImageUrl() {
-        return productImageUrl;
-    }
-
-    public String getProductPrice() {
-        return productPrice;
-    }
-
-    public String getProductCategory() {
-        return productCategory;
-    }
-
-    public Instant getAddedAt() {
-        return addedAt;
     }
 }
