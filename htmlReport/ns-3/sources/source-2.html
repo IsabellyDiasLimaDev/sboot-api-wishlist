@@ -1,0 +1,102 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > WishlistResponse</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">br.com.magalu.sbootapiwishlist.adapter.in.web.dto</a>
+</div>
+
+<h1>Coverage Summary for Class: WishlistResponse (br.com.magalu.sbootapiwishlist.adapter.in.web.dto)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">WishlistResponse$ItemResponse</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.adapter.in.web.dto;
+&nbsp;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import lombok.Data;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Schema(name = &quot;WishlistResponse&quot;, description = &quot;Resposta da wishlist do cliente&quot;)
+&nbsp;public class WishlistResponse {
+&nbsp;
+&nbsp;    @Schema(description = &quot;Identificador do cliente&quot;, example = &quot;12345&quot;)
+&nbsp;    private UUID clientId;
+&nbsp;    @Schema(description = &quot;Lista de itens na wishlist do cliente&quot;)
+&nbsp;    private List&lt;ItemResponse&gt; items;
+&nbsp;
+&nbsp;    @Data
+&nbsp;    public static class ItemResponse {
+&nbsp;        @Schema(description = &quot;Identificador do produto&quot;, example = &quot;1&quot;)
+&nbsp;        private UUID productId;
+&nbsp;        @Schema(description = &quot;Nome do produto&quot;, example = &quot;Tenis Adidas&quot;)
+&nbsp;        private String productName;
+&nbsp;        @Schema(description = &quot;Descrição do produto&quot;, example = &quot;Tenis Adidas Running&quot;)
+&nbsp;        private String productDescription;
+&nbsp;        @Schema(description = &quot;URL da imagem do produto&quot;, example = &quot;https://assets.adidas.com/tenis.jpg&quot;)
+&nbsp;        private String productImageUrl;
+&nbsp;        @Schema(description = &quot;Preço do produto em reais&quot;, example = &quot;200.00&quot;)
+&nbsp;        private Double productPrice;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-07 19:06</div>
+</div>
+</body>
+</html>
