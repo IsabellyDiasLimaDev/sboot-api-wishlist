@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > WishlistItem</title>
+  <title>Coverage Report > WishlistNotFoundException</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.magalu.sbootapiwishlist.domain.model</a>
+    <a href="../index.html">br.com.magalu.sbootapiwishlist.domain.exception</a>
 </div>
 
-<h1>Coverage Summary for Class: WishlistItem (br.com.magalu.sbootapiwishlist.domain.model)</h1>
+<h1>Coverage Summary for Class: WishlistNotFoundException (br.com.magalu.sbootapiwishlist.domain.exception)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -37,45 +37,33 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 <th class="coverageStat 
 ">
-  Branch, %
-</th>
-<th class="coverageStat 
-">
   Line, %
 </th>
 </tr>
 <tr>
-  <td class="name">WishlistItem</td>
+  <td class="name">WishlistNotFoundException</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (1/1)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/10)
+    (1/1)
   </span>
 </td>
 </tr>
@@ -87,36 +75,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.domain.model;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.domain.exception;
 &nbsp;
-&nbsp;import lombok.Getter;
+&nbsp;public class WishlistNotFoundException extends RuntimeException {
 &nbsp;
-&nbsp;import java.time.Instant;
-&nbsp;import java.util.Objects;
-&nbsp;import java.util.UUID;
+&nbsp;    public WishlistNotFoundException(String message) {
+<b class="fc">&nbsp;        super(message);</b>
+&nbsp;    }
+&nbsp;}
 &nbsp;
-&nbsp;@Getter
-&nbsp;public class WishlistItem {
-&nbsp;
-&nbsp;    private final UUID productId;
-&nbsp;    private final String productName;
-&nbsp;    private final String productDescription;
-&nbsp;    private final String productImageUrl;
-&nbsp;    private final Double productPrice;
-&nbsp;    private final String productCategory;
-&nbsp;    private final Instant addedAt;
-&nbsp;
-<b class="nc">&nbsp;    public WishlistItem(UUID productId, String productName, String productDescription,</b>
-<b class="nc">&nbsp;                        String productImageUrl, Double productPrice, String productCategory) {</b>
-<b class="nc">&nbsp;        this.productId = Objects.requireNonNull(productId, &quot;productId can not be null&quot;);</b>
-<b class="nc">&nbsp;        this.productName = productName;</b>
-&nbsp;        this.productDescription = productDescription;
-<b class="nc">&nbsp;        this.productImageUrl = productImageUrl;</b>
-<b class="nc">&nbsp;        this.productPrice = productPrice;</b>
-<b class="nc">&nbsp;        this.productCategory = productCategory;</b>
-<b class="nc">&nbsp;        this.addedAt = Instant.now();</b>
-<b class="nc">&nbsp;    }</b>
-<b class="nc">&nbsp;}</b>
 </code>
 </pre>
 </div>
@@ -140,7 +107,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

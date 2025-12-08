@@ -54,19 +54,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@Schema(name = &quot;WishlistResponse&quot;, description = &quot;Resposta da wishlist do cliente&quot;)
 &nbsp;public class WishlistResponse {
 &nbsp;
-&nbsp;    @Schema(description = &quot;Identificador do cliente&quot;, example = &quot;12345&quot;)
+&nbsp;    @Schema(description = &quot;Identificador do cliente&quot;, example = &quot;550e8400-e29b-41d4-a716-446655440000&quot;)
 &nbsp;    private UUID clientId;
 &nbsp;    @Schema(description = &quot;Lista de itens na wishlist do cliente&quot;)
 &nbsp;    private List&lt;ItemResponse&gt; items;
 &nbsp;
 &nbsp;    @Data
 &nbsp;    public static class ItemResponse {
-&nbsp;        @Schema(description = &quot;Identificador do produto&quot;, example = &quot;1&quot;)
+&nbsp;        @Schema(description = &quot;Identificador do produto&quot;, example = &quot;26962d82-a6a6-4b43-8ad8-b2c8b1f65dc4&quot;)
 &nbsp;        private UUID productId;
 &nbsp;        @Schema(description = &quot;Nome do produto&quot;, example = &quot;Tenis Adidas&quot;)
 &nbsp;        private String productName;
-&nbsp;        @Schema(description = &quot;Descrição do produto&quot;, example = &quot;Tenis Adidas Running&quot;)
-&nbsp;        private String productDescription;
 &nbsp;        @Schema(description = &quot;URL da imagem do produto&quot;, example = &quot;https://assets.adidas.com/tenis.jpg&quot;)
 &nbsp;        private String productImageUrl;
 &nbsp;        @Schema(description = &quot;Preço do produto em reais&quot;, example = &quot;200.00&quot;)
@@ -96,7 +94,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

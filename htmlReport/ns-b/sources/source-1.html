@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > WishlistUseCase</title>
+  <title>Coverage Report > Wishlist</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,17 +19,65 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.magalu.sbootapiwishlist.application.port.inbound</a>
+    <a href="../index.html">br.com.magalu.sbootapiwishlist.domain.model</a>
 </div>
 
-<h1>Coverage Summary for Class: WishlistUseCase (br.com.magalu.sbootapiwishlist.application.port.inbound)</h1>
+<h1>Coverage Summary for Class: Wishlist (br.com.magalu.sbootapiwishlist.domain.model)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
 </tr>
 <tr>
-  <td class="name">WishlistUseCase</td>
+  <td class="name">Wishlist</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84,6%
+  </span>
+  <span class="absValue">
+    (11/13)
+  </span>
+</td>
 </tr>
 
 </table>
@@ -39,22 +87,49 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.application.port.inbound;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.domain.model;
 &nbsp;
-&nbsp;import br.com.magalu.sbootapiwishlist.domain.model.Wishlist;
-&nbsp;import br.com.magalu.sbootapiwishlist.domain.model.WishlistItem;
-&nbsp;
-&nbsp;import java.util.Optional;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
 &nbsp;import java.util.UUID;
 &nbsp;
-&nbsp;public interface WishlistUseCase {
-&nbsp;    WishlistItem addItem(UUID clientId, WishlistItem newItem);
+&nbsp;public class Wishlist {
 &nbsp;
-&nbsp;    void removeItem(UUID clientId, UUID productId);
+&nbsp;    private final UUID clientId;
+&nbsp;    private final List&lt;WishlistItem&gt; products;
 &nbsp;
-&nbsp;    boolean isProductInWishlist(UUID clientId, UUID productId);
+<b class="fc">&nbsp;    public Wishlist(UUID clientId) {</b>
+<b class="fc">&nbsp;        this.clientId = clientId;</b>
+<b class="fc">&nbsp;        this.products = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
 &nbsp;
-&nbsp;    Optional&lt;Wishlist&gt; getByClientId(UUID clientId);
+&nbsp;    public void addProduct(WishlistItem item) {
+<b class="pc">&nbsp;        if (item != null &amp;&amp; products.size() &gt;= 20) {</b>
+<b class="nc">&nbsp;            throw new IllegalStateException(&quot;Wishlist can have a maximum of 20 products.&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (productExists(item.getProductId())) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Product already exists in the wishlist.&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        products.add(item);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void removeProduct(UUID produtoId) {
+<b class="fc">&nbsp;        products.removeIf(p -&gt; p.getProductId().equals(produtoId));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean productExists(UUID produtoId) {
+<b class="fc">&nbsp;        return products.stream()</b>
+<b class="fc">&nbsp;                .anyMatch(p -&gt; p.getProductId().equals(produtoId));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;WishlistItem&gt; getItems() {
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(products);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UUID getClientId() {
+<b class="fc">&nbsp;        return clientId;</b>
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -79,7 +154,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

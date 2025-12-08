@@ -63,7 +63,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (7/7)
+    (5/5)
   </span>
 </td>
 </tr>
@@ -86,14 +86,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;@Schema(name = &quot;AddWishlistItemRequest&quot;, description = &quot;Requisição para adicionar um item na wishlist&quot;)
 &nbsp;public class AddWishlistItemRequest {
 &nbsp;
-&nbsp;    @Schema(description = &quot;Identificador do produto&quot;, example = &quot;1&quot;)
+&nbsp;    @Schema(description = &quot;Identificador do produto&quot;, example = &quot;26962d82-a6a6-4b43-8ad8-b2c8b1f65dc4&quot;)
 &nbsp;    private UUID productId;
 &nbsp;
 &nbsp;    @Schema(description = &quot;Nome do produto&quot;, example = &quot;Tenis Adidas&quot;)
 &nbsp;    private String productName;
-&nbsp;
-&nbsp;    @Schema(description = &quot;Descrição do produto&quot;, example = &quot;Tenis Adidas Running&quot;)
-&nbsp;    private String productDescription;
 &nbsp;
 &nbsp;    @Schema(description = &quot;URL da imagem do produto&quot;, example = &quot;https://assets.adidas.com/tenis.jpg&quot;)
 &nbsp;    private String productImageUrl;
@@ -101,16 +98,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Schema(description = &quot;Preço do produto em reais&quot;, example = &quot;200.00&quot;)
 &nbsp;    private Double productPrice;
 &nbsp;
-&nbsp;    @Schema(description = &quot;Categoria do produto&quot;, example = &quot;Tenis&quot;)
-&nbsp;    private String productCategory;
 &nbsp;
-<b class="fc">&nbsp;    public AddWishlistItemRequest(UUID productId, String productName, String productDescription, String productImageUrl, Double productPrice, String productCategory) {</b>
+<b class="fc">&nbsp;    public AddWishlistItemRequest(UUID productId, String productName, String productImageUrl, Double productPrice) {</b>
 <b class="fc">&nbsp;        this.productId = productId;</b>
 <b class="fc">&nbsp;        this.productName = productName;</b>
-<b class="fc">&nbsp;        this.productDescription = productDescription;</b>
 <b class="fc">&nbsp;        this.productImageUrl = productImageUrl;</b>
 <b class="fc">&nbsp;        this.productPrice = productPrice;</b>
-<b class="fc">&nbsp;        this.productCategory = productCategory;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -136,7 +129,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

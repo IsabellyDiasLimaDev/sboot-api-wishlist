@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,10 +41,8 @@ class WishlistControllerTest {
         AddWishlistItemRequest request = new AddWishlistItemRequest(
                 productId,
                 "Tenis Nike",
-                "Tenis Nike Air Max",
                 "url.jpg",
-                500.0,
-                "Tenis"
+                500.0
 
         );
 
@@ -69,10 +66,8 @@ class WishlistControllerTest {
         AddWishlistItemRequest request = new AddWishlistItemRequest(
                 productId,
                 "Tenis Nike",
-                "Tenis Nike Air Max",
                 "url.jpg",
-                500.0,
-                "Tenis"
+                500.0
         );
 
         when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
@@ -89,10 +84,8 @@ class WishlistControllerTest {
     void shouldReturnWishlistSuccessfully() {
         WishlistItem item = new WishlistItem(productId,
                 "Tenis Nike",
-                "Tenis Nike Air Max",
                 "url.jpg",
-                500.0,
-                "Tenis");
+                500.0);
         Wishlist wishlist = new Wishlist(clientId);
         wishlist.getItems().add(item);
 

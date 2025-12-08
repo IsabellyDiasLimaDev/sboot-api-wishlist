@@ -64,18 +64,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    50%
+    75%
   </span>
   <span class="absValue">
-    (3/6)
+    (3/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    93,1%
+    100%
   </span>
   <span class="absValue">
-    (27/29)
+    (23/23)
   </span>
 </td>
 </tr>
@@ -109,10 +109,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                WishlistItem item = new WishlistItem(</b>
 <b class="fc">&nbsp;                        wishlistItemDocument.getProductId(),</b>
 <b class="fc">&nbsp;                        wishlistItemDocument.getProductName(),</b>
-<b class="fc">&nbsp;                        wishlistItemDocument.getProductDescription(),</b>
 <b class="fc">&nbsp;                        wishlistItemDocument.getProductImageUrl(),</b>
-<b class="fc">&nbsp;                        wishlistItemDocument.getProductPrice(),</b>
-<b class="fc">&nbsp;                        wishlistItemDocument.getProductCategory()</b>
+<b class="fc">&nbsp;                        wishlistItemDocument.getProductPrice()</b>
 &nbsp;                );
 <b class="fc">&nbsp;                wishlist.addProduct(item);</b>
 &nbsp;            });
@@ -124,14 +122,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="pc">&nbsp;        var items = wishlist.getItems() != null</b>
 <b class="fc">&nbsp;                ? wishlist.getItems()</b>
 <b class="fc">&nbsp;                        .stream()</b>
-<b class="pc">&nbsp;                        .map(wishlistItem -&gt; new WishlistItemDocument(</b>
+<b class="fc">&nbsp;                        .map(wishlistItem -&gt; new WishlistItemDocument(</b>
 <b class="fc">&nbsp;                                wishlistItem.getProductId(),</b>
 <b class="fc">&nbsp;                                wishlistItem.getProductName(),</b>
-<b class="fc">&nbsp;                                wishlistItem.getProductDescription(),</b>
 <b class="fc">&nbsp;                                wishlistItem.getProductImageUrl(),</b>
-<b class="fc">&nbsp;                                wishlistItem.getProductPrice(),</b>
-<b class="fc">&nbsp;                                wishlistItem.getProductCategory()</b>
-<b class="nc">&nbsp;                        ))</b>
+<b class="fc">&nbsp;                                wishlistItem.getProductPrice()</b>
+&nbsp;                        ))
 <b class="fc">&nbsp;                        .collect(Collectors.toList())</b>
 <b class="fc">&nbsp;                : null;</b>
 &nbsp;
@@ -139,7 +135,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;                wishlist.getClientId(),</b>
 &nbsp;                items
 &nbsp;        );
-<b class="nc">&nbsp;    }</b>
+&nbsp;    }
 &nbsp;}
 </code>
 </pre>
@@ -164,7 +160,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

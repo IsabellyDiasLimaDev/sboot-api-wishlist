@@ -1,0 +1,219 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > WishlistController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">br.com.magalu.sbootapiwishlist.adapter.in.web</a>
+</div>
+
+<h1>Coverage Summary for Class: WishlistController (br.com.magalu.sbootapiwishlist.adapter.in.web)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WishlistController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.adapter.in.web;
+&nbsp;
+&nbsp;import br.com.magalu.sbootapiwishlist.adapter.in.web.dto.AddWishlistItemRequest;
+&nbsp;import br.com.magalu.sbootapiwishlist.adapter.in.web.dto.WishlistResponse;
+&nbsp;import br.com.magalu.sbootapiwishlist.adapter.in.web.mapper.WishlistItemMapper;
+&nbsp;import br.com.magalu.sbootapiwishlist.adapter.in.web.mapper.WishlistMapper;
+&nbsp;import br.com.magalu.sbootapiwishlist.application.port.inbound.WishlistUseCase;
+&nbsp;import br.com.magalu.sbootapiwishlist.domain.model.WishlistItem;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.Parameter;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+&nbsp;
+&nbsp;import java.net.URI;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@Tag(name = &quot;Wishlist&quot;, description = &quot;Operações de gerenciamento da wishlist&quot;)
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/wishlists&quot;)
+&nbsp;public class WishlistController {
+&nbsp;
+&nbsp;    private final WishlistUseCase wishlistUseCase;
+&nbsp;
+<b class="fc">&nbsp;    public WishlistController(WishlistUseCase wishlistUseCase) {</b>
+<b class="fc">&nbsp;        this.wishlistUseCase = wishlistUseCase;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Adiciona item na wishlist&quot;,
+&nbsp;            description = &quot;Adiciona um novo produto na wishlist do cliente informado&quot;
+&nbsp;    )
+&nbsp;    @PostMapping(&quot;/{clientId}/items&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; addItem(
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do cliente&quot;,
+&nbsp;                    example = &quot;550e8400-e29b-41d4-a716-446655440000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID clientId,
+&nbsp;            @RequestBody AddWishlistItemRequest request
+&nbsp;    ) {
+<b class="fc">&nbsp;        WishlistItem item = WishlistItemMapper.toDomain(request);</b>
+<b class="fc">&nbsp;        WishlistItem createdItem = wishlistUseCase.addItem(clientId, item);</b>
+&nbsp;
+<b class="fc">&nbsp;        URI location = URI.create(String.format(</b>
+&nbsp;                &quot;/wishlists/%s/items/%s&quot;,
+&nbsp;                clientId,
+<b class="fc">&nbsp;                createdItem.getProductId()</b>
+&nbsp;        ));
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.created(location).build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Obtém a wishlist do cliente&quot;,
+&nbsp;            description = &quot;Retorna a lista completa de itens da wishlist&quot;
+&nbsp;    )
+&nbsp;    @GetMapping(&quot;/{clientId}&quot;)
+&nbsp;    public ResponseEntity&lt;WishlistResponse&gt; getWishlist(
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do cliente&quot;,
+&nbsp;                    example = &quot;550e8400-e29b-41d4-a716-446655440000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID clientId
+&nbsp;    ) {
+<b class="fc">&nbsp;        return wishlistUseCase.getByClientId(clientId)</b>
+<b class="fc">&nbsp;                .map(WishlistMapper::toResponse)</b>
+<b class="fc">&nbsp;                .map(ResponseEntity::ok)</b>
+<b class="fc">&nbsp;                .orElse(ResponseEntity.notFound().build());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Remove item da wishlist&quot;,
+&nbsp;            description = &quot;Remove o produto da wishlist do cliente&quot;
+&nbsp;    )
+&nbsp;    @DeleteMapping(&quot;/{clientId}/items/{productId}&quot;)
+&nbsp;    public ResponseEntity&lt;Void&gt; removeItem(
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do cliente&quot;,
+&nbsp;                    example = &quot;550e8400-e29b-41d4-a716-446655440000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID clientId,
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do produto&quot;,
+&nbsp;                    example = &quot;123e4567-e89b-12d3-a456-426614174000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID productId
+&nbsp;    ) {
+<b class="fc">&nbsp;        wishlistUseCase.removeItem(clientId, productId);</b>
+<b class="fc">&nbsp;        return ResponseEntity.noContent().build();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(
+&nbsp;            summary = &quot;Verifica se o produto está na wishlist&quot;,
+&nbsp;            description = &quot;Retorna true/false indicando se o produto está presente&quot;
+&nbsp;    )
+&nbsp;    @GetMapping(&quot;/{clientId}/items/{productId}&quot;)
+&nbsp;    public ResponseEntity&lt;Boolean&gt; isProductInWishlist(
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do cliente&quot;,
+&nbsp;                    example = &quot;550e8400-e29b-41d4-a716-446655440000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID clientId,
+&nbsp;            @Parameter(
+&nbsp;                    description = &quot;Identificador do produto&quot;,
+&nbsp;                    example = &quot;123e4567-e89b-12d3-a456-426614174000&quot;
+&nbsp;            )
+&nbsp;            @PathVariable UUID productId
+&nbsp;    ) {
+<b class="fc">&nbsp;        boolean exists = wishlistUseCase.isProductInWishlist(clientId, productId);</b>
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.ok(exists);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
+</div>
+</body>
+</html>

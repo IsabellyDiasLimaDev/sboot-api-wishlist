@@ -21,10 +21,8 @@ class WishlistMapperTest {
         WishlistItem item = new WishlistItem(
                 productId,
                 "Produto",
-                "Descricao",
                 "img-url",
-                10.0,
-                "categoria"
+                10.0
         );
         wishlist.addProduct(item);
 

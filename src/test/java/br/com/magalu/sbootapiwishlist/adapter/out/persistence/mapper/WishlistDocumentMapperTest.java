@@ -25,10 +25,8 @@ class WishlistDocumentMapperTest {
         WishlistItemDocument itemDoc = new WishlistItemDocument(
                 productId,
                 "Produto",
-                "Descricao",
                 "img-url",
-                10.0,
-                "categoria"
+                10.0
         );
 
         WishlistDocument document = new WishlistDocument(clientId, List.of(itemDoc));
@@ -41,10 +39,8 @@ class WishlistDocumentMapperTest {
         WishlistItem item = result.getItems().getFirst();
         assertEquals(productId, item.getProductId());
         assertEquals("Produto", item.getProductName());
-        assertEquals("Descricao", item.getProductDescription());
         assertEquals("img-url", item.getProductImageUrl());
         assertEquals(10.0, item.getProductPrice());
-        assertEquals("categoria", item.getProductCategory());
     }
 
     @Test
@@ -71,10 +67,8 @@ class WishlistDocumentMapperTest {
         WishlistItem item = new WishlistItem(
                 productId,
                 "Produto",
-                "Descricao",
                 "img-url",
-                10.0,
-                "categoria"
+                10.0
         );
         wishlist.addProduct(item);
 
@@ -87,10 +81,8 @@ class WishlistDocumentMapperTest {
         WishlistItemDocument itemDoc = document.getItems().getFirst();
         assertEquals(productId, itemDoc.getProductId());
         assertEquals("Produto", itemDoc.getProductName());
-        assertEquals("Descricao", itemDoc.getProductDescription());
         assertEquals("img-url", itemDoc.getProductImageUrl());
         assertEquals(10.0, itemDoc.getProductPrice());
-        assertEquals("categoria", itemDoc.getProductCategory());
     }
 
     @Test

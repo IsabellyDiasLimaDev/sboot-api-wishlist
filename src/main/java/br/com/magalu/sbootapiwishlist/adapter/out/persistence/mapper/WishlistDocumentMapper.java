@@ -20,10 +20,8 @@ public class WishlistDocumentMapper {
                 WishlistItem item = new WishlistItem(
                         wishlistItemDocument.getProductId(),
                         wishlistItemDocument.getProductName(),
-                        wishlistItemDocument.getProductDescription(),
                         wishlistItemDocument.getProductImageUrl(),
-                        wishlistItemDocument.getProductPrice(),
-                        wishlistItemDocument.getProductCategory()
+                        wishlistItemDocument.getProductPrice()
                 );
                 wishlist.addProduct(item);
             });
@@ -38,10 +36,8 @@ public class WishlistDocumentMapper {
                         .map(wishlistItem -> new WishlistItemDocument(
                                 wishlistItem.getProductId(),
                                 wishlistItem.getProductName(),
-                                wishlistItem.getProductDescription(),
                                 wishlistItem.getProductImageUrl(),
-                                wishlistItem.getProductPrice(),
-                                wishlistItem.getProductCategory()
+                                wishlistItem.getProductPrice()
                         ))
                         .collect(Collectors.toList())
                 : null;

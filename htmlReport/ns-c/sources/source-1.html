@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-  <title>Coverage Report > WishlistMongoRepository</title>
+  <title>Coverage Report > WishlistUseCase</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,10 +19,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">br.com.magalu.sbootapiwishlist.adapter.out.persistence.repository</a>
+    <a href="../index.html">br.com.magalu.sbootapiwishlist.application.port.inbound</a>
 </div>
 
-<h1>Coverage Summary for Class: WishlistMongoRepository (br.com.magalu.sbootapiwishlist.adapter.out.persistence.repository)</h1>
+<h1>Coverage Summary for Class: WishlistUseCase (br.com.magalu.sbootapiwishlist.application.port.inbound)</h1>
 
 <table class="coverageStats">
 
@@ -30,13 +30,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">WishlistMongoRepository$MockitoMock$WqBTbVMC</td>
+    <td class="name">WishlistUseCase$MockitoMock$3PJptbHM</td>
   </tr>
   <tr>
-    <td class="name">WishlistMongoRepository$MockitoMock$WqBTbVMC$auxiliary$ltDqIfFu</td>
+    <td class="name">WishlistUseCase$MockitoMock$3PJptbHM$auxiliary$Ulzr39pR</td>
   </tr>
   <tr>
-    <td class="name">WishlistMongoRepository$MockitoMock$WqBTbVMC$auxiliary$PJhshWmy</td>
+    <td class="name">WishlistUseCase$MockitoMock$3PJptbHM$auxiliary$vNlH0GiF</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -48,16 +48,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.adapter.out.persistence.repository;
+<code class="sourceCode" id="sourceCode">&nbsp;package br.com.magalu.sbootapiwishlist.application.port.inbound;
 &nbsp;
-&nbsp;import br.com.magalu.sbootapiwishlist.adapter.out.persistence.document.WishlistDocument;
-&nbsp;import org.springframework.data.mongodb.repository.MongoRepository;
-&nbsp;import org.springframework.stereotype.Repository;
+&nbsp;import br.com.magalu.sbootapiwishlist.domain.model.Wishlist;
+&nbsp;import br.com.magalu.sbootapiwishlist.domain.model.WishlistItem;
 &nbsp;
+&nbsp;import java.util.Optional;
 &nbsp;import java.util.UUID;
 &nbsp;
-&nbsp;@Repository
-&nbsp;public interface WishlistMongoRepository extends MongoRepository&lt;WishlistDocument, UUID&gt; {
+&nbsp;public interface WishlistUseCase {
+&nbsp;    WishlistItem addItem(UUID clientId, WishlistItem newItem);
+&nbsp;
+&nbsp;    void removeItem(UUID clientId, UUID productId);
+&nbsp;
+&nbsp;    boolean isProductInWishlist(UUID clientId, UUID productId);
+&nbsp;
+&nbsp;    Optional&lt;Wishlist&gt; getByClientId(UUID clientId);
 &nbsp;}
 </code>
 </pre>
@@ -82,7 +88,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-07 19:06</div>
+    <div style="float:right;">generated on 2025-12-08 00:43</div>
 </div>
 </body>
 </html>

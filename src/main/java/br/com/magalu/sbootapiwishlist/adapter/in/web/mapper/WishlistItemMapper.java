@@ -12,10 +12,8 @@ public final class WishlistItemMapper {
         return new WishlistItem(
                 request.getProductId(),
                 request.getProductName(),
-                request.getProductDescription(),
                 request.getProductImageUrl(),
-                request.getProductPrice(),
-                request.getProductCategory()
+                request.getProductPrice()
         );
     }
 }

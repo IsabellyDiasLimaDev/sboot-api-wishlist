@@ -32,7 +32,7 @@ class WishlistServiceTest {
     void shouldAddItemWhenWishlistDoesNotExist() {
         UUID clientId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        WishlistItem newItem = new WishlistItem(productId, "Produto", "Desc", "img", 10.0, "cat");
+        WishlistItem newItem = new WishlistItem(productId, "Produto", "img", 10.0);
 
         when(wishlistRepositoryPort.findByClientId(clientId)).thenReturn(Optional.empty());
 
@@ -52,11 +52,11 @@ class WishlistServiceTest {
     void shouldNotAddDuplicateProduct() {
         UUID clientId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        WishlistItem existingItem = new WishlistItem(productId, "Produto", "Desc", "img", 10.0, "cat");
+        WishlistItem existingItem = new WishlistItem(productId, "Produto", "img", 10.0);
         Wishlist wishlist = new Wishlist(clientId);
         wishlist.addProduct(existingItem);
 
-        WishlistItem newItem = new WishlistItem(productId, "Produto 2", "Outra desc", "img2", 20.0, "cat2");
+        WishlistItem newItem = new WishlistItem(productId, "Produto 2", "img2", 20.0);
 
         when(wishlistRepositoryPort.findByClientId(clientId)).thenReturn(Optional.of(wishlist));
 
@@ -72,7 +72,7 @@ class WishlistServiceTest {
     void shouldRemoveItemFromExistingWishlist() {
         UUID clientId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        WishlistItem item = new WishlistItem(productId, "Produto", "Desc", "img", 10.0, "cat");
+        WishlistItem item = new WishlistItem(productId, "Produto", "img", 10.0);
         Wishlist wishlist = new Wishlist(clientId);
         wishlist.addProduct(item);
 
@@ -107,7 +107,7 @@ class WishlistServiceTest {
         UUID clientId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
         Wishlist wishlist = new Wishlist(clientId);
-        wishlist.addProduct(new WishlistItem(productId, "Produto", "Desc", "img", 10.0, "cat"));
+        wishlist.addProduct(new WishlistItem(productId, "Produto", "img", 10.0));
 
         when(wishlistRepositoryPort.findByClientId(clientId)).thenReturn(Optional.of(wishlist));
 
