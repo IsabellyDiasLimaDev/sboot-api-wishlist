@@ -20,6 +20,9 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
+# Instala utilitário `nc` para o wait-for-port no entrypoint do compose
+RUN apk add --no-cache netcat-openbsd
+
 # Copia o JAR gerado
 COPY --from=builder /app/target/sboot-api-wishlist-0.0.1-SNAPSHOT.jar app.jar
 
