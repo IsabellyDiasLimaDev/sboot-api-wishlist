@@ -2,67 +2,51 @@ package br.com.magalu.sbootapiwishlist.adapter.in.web;
 
 import br.com.magalu.sbootapiwishlist.adapter.in.web.dto.AddWishlistItemRequest;
 import br.com.magalu.sbootapiwishlist.adapter.in.web.dto.WishlistResponse;
-import br.com.magalu.sbootapiwishlist.adapter.in.web.mapper.WishlistItemMapper;
 import br.com.magalu.sbootapiwishlist.application.port.inbound.WishlistUseCase;
+import br.com.magalu.sbootapiwishlist.domain.exception.ProductAlreadyInWishlistException;
+import br.com.magalu.sbootapiwishlist.domain.exception.WishlistNotFoundException;
 import br.com.magalu.sbootapiwishlist.domain.model.Wishlist;
 import br.com.magalu.sbootapiwishlist.domain.model.WishlistItem;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(WishlistController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class WishlistControllerTest {
 
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockitoBean
     private WishlistUseCase wishlistUseCase;
-    private WishlistController controller;
 
-    private UUID clientId;
-    private UUID productId;
-
-    @BeforeEach
-    void setup() {
-        wishlistUseCase = mock(WishlistUseCase.class);
-        controller = new WishlistController(wishlistUseCase);
-
-        clientId = UUID.randomUUID();
-        productId = UUID.randomUUID();
-    }
+    private final UUID clientId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+    private final UUID productId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
 
     // ------------------------------------------------------------
-    // TESTE: ADICIONAR ITEM (Cenário Feliz)
+    // POST /wishlists/{clientId}/items - cenário feliz
     // ------------------------------------------------------------
     @Test
-    void shouldAddItemSuccessfully() {
-        AddWishlistItemRequest request = new AddWishlistItemRequest(
-                productId,
-                "Tenis Nike",
-                "url.jpg",
-                500.0
-
-        );
-
-        when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
-                .thenReturn(WishlistItemMapper.toDomain(request));
-
-        ResponseEntity<Void> response = controller.addItem(clientId, request);
-
-        assertEquals(201, response.getStatusCode().value());
-        assertEquals(
-                "/wishlists/" + clientId + "/items/" + productId,
-                response.getHeaders().getLocation().toString()
-        );
-    }
-
-    // ------------------------------------------------------------
-    // TESTE: ADICIONAR ITEM (Erro)
-    // ------------------------------------------------------------
-    @Test
-    void shouldReturnErrorWhenUseCaseFailsToAddItem() {
+    void shouldAddItemSuccessfully() throws Exception {
         AddWishlistItemRequest request = new AddWishlistItemRequest(
                 productId,
                 "Tenis Nike",
@@ -70,110 +54,227 @@ class WishlistControllerTest {
                 500.0
         );
 
-        when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
-                .thenThrow(new RuntimeException("Erro ao adicionar item"));
+        WishlistItem created = new WishlistItem(
+                productId,
+                request.getProductName(),
+                request.getProductImageUrl(),
+                request.getProductPrice()
+        );
 
-        assertThrows(RuntimeException.class,
-                () -> controller.addItem(clientId, request));
+        when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
+                .thenReturn(created);
+
+        String requestJson = """
+                {
+                  "productId": "%s",
+                  "productName": "%s",
+                  "productImageUrl": "%s",
+                  "productPrice": %s
+                }
+                """.formatted(
+                productId,
+                "Tenis Nike",
+                "url.jpg",
+                500.0
+        );
+
+        mockMvc.perform(post("/wishlists/{clientId}/items", clientId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isCreated());
     }
 
     // ------------------------------------------------------------
-    // TESTE: GET WISHLIST (Feliz)
+    // POST /wishlists/{clientId}/items - produto já existe (409)
     // ------------------------------------------------------------
     @Test
-    void shouldReturnWishlistSuccessfully() {
-        WishlistItem item = new WishlistItem(productId,
+    void shouldReturnConflictWhenProductAlreadyInWishlist() throws Exception {
+        AddWishlistItemRequest request = new AddWishlistItemRequest(
+                productId,
                 "Tenis Nike",
                 "url.jpg",
-                500.0);
+                500.0
+        );
+
+        when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
+                .thenThrow(new ProductAlreadyInWishlistException("Produto já está na wishlist"));
+
+        String requestJson = """
+                {
+                  "productId": "%s",
+                  "productName": "%s",
+                  "productImageUrl": "%s",
+                  "productPrice": %s
+                }
+                """.formatted(
+                productId,
+                "Tenis Nike",
+                "url.jpg",
+                500.0
+        );
+
+        mockMvc.perform(post("/wishlists/{clientId}/items", clientId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isConflict());
+    }
+
+    // ------------------------------------------------------------
+    // POST /wishlists/{clientId}/items - erro inesperado (500)
+    // ------------------------------------------------------------
+    @Test
+    void shouldReturnInternalServerErrorOnUnexpectedErrorWhenAddingItem() throws Exception {
+        AddWishlistItemRequest request = new AddWishlistItemRequest(
+                productId,
+                "Tenis Nike",
+                "url.jpg",
+                500.0
+        );
+
+        when(wishlistUseCase.addItem(eq(clientId), any(WishlistItem.class)))
+                .thenThrow(new RuntimeException("Erro inesperado"));
+
+        String requestJson = """
+                {
+                  "productId": "%s",
+                  "productName": "%s",
+                  "productImageUrl": "%s",
+                  "productPrice": %s
+                }
+                """.formatted(
+                productId,
+                "Tenis Nike",
+                "url.jpg",
+                500.0
+        );
+
+        mockMvc.perform(post("/wishlists/{clientId}/items", clientId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isInternalServerError());
+    }
+
+    // ------------------------------------------------------------
+    // GET /wishlists/{clientId} - cenário feliz
+    // ------------------------------------------------------------
+    @Test
+    void shouldReturnWishlistSuccessfully() throws Exception {
+        WishlistItem item = new WishlistItem(
+                productId,
+                "Tenis Adidas",
+                "https://assets.adidas.com/tenis.jpg",
+                200.0
+        );
         Wishlist wishlist = new Wishlist(clientId);
-        wishlist.getItems().add(item);
+        wishlist.addProduct(item);
 
         when(wishlistUseCase.getByClientId(clientId))
                 .thenReturn(Optional.of(wishlist));
 
-        ResponseEntity<WishlistResponse> response = controller.getWishlist(clientId);
+        mockMvc.perform(get("/wishlists/{clientId}", clientId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.clientId").value(clientId.toString()))
+                .andExpect(jsonPath("$.items", hasSize(1)))
+                .andExpect(jsonPath("$.items[0].productId").value(productId.toString()))
+                .andExpect(jsonPath("$.items[0].productName").value("Tenis Adidas"))
+                .andExpect(jsonPath("$.items[0].productImageUrl").value("https://assets.adidas.com/tenis.jpg"))
+                .andExpect(jsonPath("$.items[0].productPrice").value(200.0));
 
-assertTrue(response.getStatusCode().is2xxSuccessful());
-assertNotNull(response.getBody());
     }
 
     // ------------------------------------------------------------
-    // TESTE: GET WISHLIST (Não encontrado)
+    // GET /wishlists/{clientId} - não encontrada (404)
     // ------------------------------------------------------------
     @Test
-    void shouldReturnNotFoundWhenWishlistDoesNotExist() {
+    void shouldReturnNotFoundWhenWishlistDoesNotExist() throws Exception {
         when(wishlistUseCase.getByClientId(clientId))
                 .thenReturn(Optional.empty());
 
-        ResponseEntity<WishlistResponse> response = controller.getWishlist(clientId);
-
-        assertEquals(404, response.getStatusCode().value());
-        assertNull(response.getBody());
+        mockMvc.perform(get("/wishlists/{clientId}", clientId))
+                .andExpect(status().isNotFound());
     }
 
     // ------------------------------------------------------------
-    // TESTE: REMOVER ITEM (Feliz)
+    // GET /wishlists/{clientId} - erro inesperado (500)
     // ------------------------------------------------------------
     @Test
-    void shouldRemoveItemSuccessfully() {
-        doNothing().when(wishlistUseCase).removeItem(clientId, productId);
+    void shouldReturnInternalServerErrorOnUnexpectedErrorWhenGettingWishlist() throws Exception {
+        when(wishlistUseCase.getByClientId(clientId))
+                .thenThrow(new RuntimeException("Erro inesperado"));
 
-        ResponseEntity<Void> response = controller.removeItem(clientId, productId);
-
-        assertEquals(204, response.getStatusCode().value());
-        verify(wishlistUseCase, times(1)).removeItem(clientId, productId);
+        mockMvc.perform(get("/wishlists/{clientId}", clientId))
+                .andExpect(status().isInternalServerError());
     }
 
     // ------------------------------------------------------------
-    // TESTE: REMOVER ITEM (Erro)
+    // DELETE /wishlists/{clientId}/items/{productId} - cenário feliz
     // ------------------------------------------------------------
     @Test
-    void shouldReturnErrorWhenRemoveItemFails() {
-        doThrow(new RuntimeException("Item não existe"))
-                .when(wishlistUseCase).removeItem(clientId, productId);
-
-        assertThrows(RuntimeException.class,
-                () -> controller.removeItem(clientId, productId));
+    void shouldRemoveItemSuccessfully() throws Exception {
+        mockMvc.perform(delete("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isNoContent());
     }
 
     // ------------------------------------------------------------
-    // TESTE: VERIFICAR EXISTÊNCIA (Feliz)
+    // DELETE /wishlists/{clientId}/items/{productId} - wishlist não encontrada (404)
     // ------------------------------------------------------------
     @Test
-    void shouldReturnTrueWhenProductExists() {
+    void shouldReturnNotFoundWhenRemovingFromNonExistingWishlist() throws Exception {
+        willThrow(new WishlistNotFoundException("Wishlist não encontrada"))
+                .given(wishlistUseCase).removeItem(clientId, productId);
+
+        mockMvc.perform(delete("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isNotFound());
+    }
+
+    // ------------------------------------------------------------
+    // DELETE /wishlists/{clientId}/items/{productId} - erro inesperado (500)
+    // ------------------------------------------------------------
+    @Test
+    void shouldReturnInternalServerErrorOnUnexpectedErrorWhenRemovingItem() throws Exception {
+        willThrow(new RuntimeException("Erro inesperado"))
+                .given(wishlistUseCase).removeItem(clientId, productId);
+
+        mockMvc.perform(delete("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isInternalServerError());
+    }
+
+    // ------------------------------------------------------------
+    // GET /wishlists/{clientId}/items/{productId} - produto existe (200, true)
+    // ------------------------------------------------------------
+    @Test
+    void shouldReturnTrueWhenProductExists() throws Exception {
         when(wishlistUseCase.isProductInWishlist(clientId, productId))
                 .thenReturn(true);
 
-        ResponseEntity<Boolean> response = controller.isProductInWishlist(clientId, productId);
-
-        assertEquals(200, response.getStatusCode().value());
-        assertTrue(Boolean.TRUE.equals(response.getBody()));
+        mockMvc.perform(get("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 
     // ------------------------------------------------------------
-    // TESTE: VERIFICAR EXISTÊNCIA (Falso)
+    // GET /wishlists/{clientId}/items/{productId} - produto não existe (200, false)
     // ------------------------------------------------------------
     @Test
-    void shouldReturnFalseWhenProductDoesNotExist() {
+    void shouldReturnFalseWhenProductDoesNotExist() throws Exception {
         when(wishlistUseCase.isProductInWishlist(clientId, productId))
                 .thenReturn(false);
 
-        ResponseEntity<Boolean> response = controller.isProductInWishlist(clientId, productId);
-
-        assertEquals(200, response.getStatusCode().value());
-        assertFalse(Boolean.TRUE.equals(response.getBody()));
+        mockMvc.perform(get("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
     }
 
     // ------------------------------------------------------------
-    // TESTE: VERIFICAR EXISTÊNCIA (Erro)
+    // GET /wishlists/{clientId}/items/{productId} - erro inesperado (500)
     // ------------------------------------------------------------
     @Test
-    void shouldThrowErrorWhenUseCaseFailsOnCheck() {
+    void shouldReturnInternalServerErrorOnUnexpectedErrorWhenCheckingProduct() throws Exception {
         when(wishlistUseCase.isProductInWishlist(clientId, productId))
-                .thenThrow(new RuntimeException("Erro no caso de uso"));
+                .thenThrow(new RuntimeException("Erro inesperado"));
 
-        assertThrows(RuntimeException.class,
-                () -> controller.isProductInWishlist(clientId, productId));
+        mockMvc.perform(get("/wishlists/{clientId}/items/{productId}", clientId, productId))
+                .andExpect(status().isInternalServerError());
     }
 }

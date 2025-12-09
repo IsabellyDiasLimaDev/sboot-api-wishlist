@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    16,7%
+    100%
   </span>
   <span class="absValue">
-    (1/6)
+    (4/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    10%
+    100%
   </span>
   <span class="absValue">
-    (1/10)
+    (4/4)
   </span>
 </td>
 </tr>
@@ -84,45 +84,25 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import org.springframework.web.bind.annotation.ExceptionHandler;
 &nbsp;import org.springframework.web.bind.annotation.RestControllerAdvice;
 &nbsp;
-&nbsp;import java.time.Instant;
-&nbsp;import java.util.Map;
-&nbsp;
 &nbsp;@RestControllerAdvice
 <b class="fc">&nbsp;public class GlobalExceptionHandler {</b>
 &nbsp;
-&nbsp;    @ExceptionHandler(IllegalArgumentException.class)
-&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleIllegalArgument(IllegalArgumentException ex) {
-&nbsp;        // Erros de validação de entrada / regras de negócio inválidas
-<b class="nc">&nbsp;        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());</b>
-&nbsp;    }
-&nbsp;
-&nbsp;    @ExceptionHandler(IllegalStateException.class)
-&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleIllegalState(IllegalStateException ex) {
-&nbsp;        // Estados inválidos de regra de negócio (ex: limite de itens)
-<b class="nc">&nbsp;        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());</b>
-&nbsp;    }
-&nbsp;
 &nbsp;    @ExceptionHandler(WishlistNotFoundException.class)
-&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleWishlistNotFound(WishlistNotFoundException ex) {
-&nbsp;        // Wishlist do cliente não encontrada
-<b class="nc">&nbsp;        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());</b>
+&nbsp;    public ResponseEntity&lt;Void&gt; handleWishlistNotFound(WishlistNotFoundException ex) {
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ExceptionHandler(ProductAlreadyInWishlistException.class)
-&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleProductAlreadyInWishlist(ProductAlreadyInWishlistException ex) {
-<b class="nc">&nbsp;        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());</b>
+&nbsp;    public ResponseEntity&lt;Void&gt; handleProductAlreadyInWishlist(ProductAlreadyInWishlistException ex) {
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CONFLICT).build();</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    private ResponseEntity&lt;Map&lt;String, Object&gt;&gt; buildErrorResponse(HttpStatus status, String message) {
-<b class="nc">&nbsp;        Map&lt;String, Object&gt; body = Map.of(</b>
-<b class="nc">&nbsp;                &quot;timestamp&quot;, Instant.now().toString(),</b>
-<b class="nc">&nbsp;                &quot;status&quot;, status.value(),</b>
-<b class="nc">&nbsp;                &quot;error&quot;, status.getReasonPhrase(),</b>
-&nbsp;                &quot;message&quot;, message
-&nbsp;        );
-<b class="nc">&nbsp;        return ResponseEntity.status(status).body(body);</b>
+&nbsp;    @ExceptionHandler(RuntimeException.class)
+&nbsp;    public ResponseEntity&lt;Void&gt; handleUnexpected(RuntimeException ex) {
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();</b>
 &nbsp;    }
 &nbsp;}
+&nbsp;
 </code>
 </pre>
 </div>
@@ -146,7 +126,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2025-12-08 00:43</div>
+    <div style="float:right;">generated on 2025-12-08 23:05</div>
 </div>
 </body>
 </html>
