@@ -63,6 +63,3 @@ Observações:
 - docker-compose.yml: orquestra app + Mongo, healthcheck e ordem de inicialização.
 - src/main/resources/application.properties: lê SPRING_DATA_MONGODB_URI do ambiente.
 - .env.example: modelo de variáveis sem segredos.
-
-## Licença
-- Informe aqui a licença do projeto, se aplicável.
